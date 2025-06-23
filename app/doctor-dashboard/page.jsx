@@ -1,9 +1,12 @@
 import { authGuard } from "@/lib/authGuard";
 import { redirect } from "next/navigation";
 
-export default async function InstructorDashboard() {
-  const { authorized, session } = await authGuard("doctor");
-  if (!authorized) redirect("/unauthorized");
+export default async function DoctorDashboard() {
+  const { authorized, dbUser } = await authGuard("DOCTOR");
 
-  return <div className="py-42">Instructor content for {session.user.name}</div>;
+  if (!authorized) {
+    redirect("/unauthorized"); // Or show a 403 page
+  }
+
+  return <div>Doctor Dashboard for {dbUser.name}</div>;
 }

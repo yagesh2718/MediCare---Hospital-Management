@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { findUserByEmail } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 
 export const authOptions = {
@@ -8,43 +8,63 @@ export const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = await findUserByEmail(credentials.email);
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
+
         if (!user) throw new Error("No user found");
-        const isValid = await bcrypt.compare(credentials.password, user.password);
+
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
         if (!isValid) throw new Error("Invalid password");
+
         return user;
       },
     }),
   ],
   callbacks: {
-  async jwt({ token, user, trigger, session }) {
-    // On login
-    if (user) {
-      token.id = user.id;
-      token.role = user.role;
-      token.name = user.name;
-      token.email = user.email;
-      token.image = user.image; // <- include image if available
-    }
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        // Fetch fresh user from DB to get full info (esp. credits)
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
 
-    // On session update (like profile edit)
-    if (trigger === "update" && session) {
-      token.name = session.name;
-      token.image = session.image;
-    }
+        token.id = dbUser.id;
+        token.role = dbUser.role;
+        token.name = dbUser.name;
+        token.email = dbUser.email;
+        token.image = dbUser.imageUrl;
+        token.credits = dbUser.credits ?? 0;
+      }
 
-    return token;
+      // For updates like name/image
+      if (trigger === "update") {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email },
+        });
+
+        if (dbUser) {
+          token.name = dbUser.name;
+          token.image = dbUser.imageUrl;
+          token.credits = dbUser.credits; 
+          token.role = dbUser.role;
+        }
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user = token;
+      return session;
+    },
   },
-
-  async session({ session, token }) {
-    session.user = token;
-    return session;
-  },
-},
   pages: {
     signIn: "/login",
   },

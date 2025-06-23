@@ -1,20 +1,26 @@
+import { prisma } from "@/lib/prisma";
+
 import { NextResponse } from "next/server";
-import { getAllUsers } from "@/lib/auth";
-import fs from "fs/promises";
-import path from "path";
 
 export async function POST(req) {
-  const { email, name, image } = await req.json();
-  const filePath = path.join(process.cwd(), "lib", "users.json");
+  try {
+    const { email, name, image } = await req.json();
 
-  const users = await getAllUsers();
-  const index = users.findIndex(u => u.email === email);
-  if (index === -1) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!email || (!name && !image)) {
+      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    }
 
-  users[index].name = name;
-  users[index].image = image;
+    const updated = await prisma.user.update({
+      where: { email },
+      data: {
+        name,
+        imageUrl: image,
+      },
+    });
 
-  await fs.writeFile(filePath, JSON.stringify(users, null, 2));
-
-  return NextResponse.json({ message: "Updated" });
+    return NextResponse.json({ message: "Profile updated", updated });
+  } catch (err) {
+    console.error("Update error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
 }

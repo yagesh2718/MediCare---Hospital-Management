@@ -7,7 +7,6 @@ export default function Signup() {
     name: "",
     email: "",
     password: "",
-    role: "patient",
   });
   const router = useRouter();
 
@@ -56,14 +55,14 @@ export default function Signup() {
             required
             className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
-          <select
+          {/* <select
             value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value })}
             className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           >
             <option value="patient">Patient</option>
             <option value="doctor">Doctor</option>
-          </select>
+          </select> */}
         </div>
         <button
           type="submit"
