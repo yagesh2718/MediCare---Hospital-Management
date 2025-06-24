@@ -4,7 +4,7 @@
  import { getCurrentUser } from "@/actions/onboarding";
  import { redirect } from "next/navigation";
  import { Calendar, Clock, DollarSign } from "lucide-react";
-// import DoctorAppointmentsList from "./_components/appointments-list";
+  import DoctorAppointmentsList from "./_components/appointments-list";
 // import { getDoctorEarnings, getDoctorPayouts } from "@/actions/payout";
 // import { DoctorEarnings } from "./_components/doctor-earnings";
 
@@ -59,9 +59,9 @@ export default async function DoctorDashboardPage() {
       </TabsList>
       <div className="md:col-span-3">
         <TabsContent value="appointments" className="border-none p-0">
-          {/* <DoctorAppointmentsList
+          <DoctorAppointmentsList
             appointments={appointmentsData.appointments || []}
-          /> */}
+          />
         </TabsContent>
         <TabsContent value="availability" className="border-none p-0">
           <AvailabilitySettings slots={availabilityData.slots || []} />

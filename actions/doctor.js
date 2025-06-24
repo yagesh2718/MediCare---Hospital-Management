@@ -86,28 +86,28 @@ export async function getDoctorAvailability() {
  * Get doctor's upcoming appointments
  */
 export async function getDoctorAppointments() {
-//   const { authorized, dbUser } = await authGuard("DOCTOR");
-//   if (!authorized || !dbUser) throw new Error("Unauthorized");
+  const { authorized, dbUser } = await authGuard("DOCTOR");
+  if (!authorized || !dbUser) throw new Error("Unauthorized");
 
-//   try {
-//     const appointments = await db.appointment.findMany({
-//       where: {
-//         doctorId: dbUser.id,
-//         status: { in: ["SCHEDULED"] },
-//       },
-//       include: {
-//         patient: true,
-//       },
-//       orderBy: {
-//         startTime: "asc",
-//       },
-//     });
+  try {
+    const appointments = await db.appointment.findMany({
+      where: {
+        doctorId: dbUser.id,
+        status: { in: ["SCHEDULED"] },
+      },
+      include: {
+        patient: true,
+      },
+      orderBy: {
+        startTime: "asc",
+      },
+    });
 
-//     return { appointments };
-//   } catch (error) {
-//     throw new Error("Failed to fetch appointments: " + error.message);
-//   }
-return []
+    return { appointments };
+  } catch (error) {
+    throw new Error("Failed to fetch appointments: " + error.message);
+  }
+
  }
 
 
