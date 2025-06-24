@@ -30,11 +30,7 @@ export function AppointmentForm({ doctorId, slot, onBack, onComplete }) {
 
    await submitBooking(formData);
 
-  if (res?.success) {
-    await update(); // Refresh session to show new credits
-    toast.success("Appointment booked success!");
-    onComplete();   // Do your parent callback
-  }
+  
 };
 
 

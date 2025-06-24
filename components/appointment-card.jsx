@@ -34,12 +34,15 @@ import { generateVideoToken } from "@/actions/appointments";
 import useFetch from "@/hooks/use-fetch";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 
 export function AppointmentCard({
   appointment,
   userRole,
   refetchAppointments,
 }) {
+  const { update } = useSession();
   const [open, setOpen] = useState(false);
   const [action, setAction] = useState(null); // 'cancel', 'notes', 'video', or 'complete'
   const [notes, setNotes] = useState(appointment.notes || "");
@@ -107,6 +110,7 @@ export function AppointmentCard({
       const formData = new FormData();
       formData.append("appointmentId", appointment.id);
       await submitCancel(formData);
+      await update()
     }
   };
 
