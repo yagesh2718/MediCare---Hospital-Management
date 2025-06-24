@@ -19,7 +19,6 @@ export default function HeaderAuth() {
   const [open, setOpen] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [name, setName] = useState("");
-  const [credits, setCredits] = useState("");
   const [image, setImage] = useState("");
   const dropdownRef = useRef();
   const [_, forceUpdate] = useState(false);
@@ -32,7 +31,6 @@ export default function HeaderAuth() {
     if (session?.user) {
       setName(session.user.name || "");
       setImage(session.user.image || "");
-      setCredits(session.user.credits || 0)
     }
   }, [session]);
 

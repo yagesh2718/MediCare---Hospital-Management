@@ -51,7 +51,7 @@ export async function allocateCreditsAfterPurchase(packageId) {
       },
     });
 
-     revalidatePath("/doctors");
+    revalidatePath("/doctors");
     revalidatePath("/appointments");
 
     return updatedUser;
@@ -111,7 +111,7 @@ export async function deductCreditsForAppointment(doctorId) {
         },
       },
     });
-
+    revalidatePath("/")
     return updatedUser;
   });
 

@@ -9,8 +9,10 @@ import { Loader2, Clock, ArrowLeft, Calendar, CreditCard } from "lucide-react";
 import { bookAppointment } from "@/actions/appointments";
 import { toast } from "sonner";
 import useFetch from "@/hooks/use-fetch";
+import { useSession } from "next-auth/react";
 
 export function AppointmentForm({ doctorId, slot, onBack, onComplete }) {
+  const { update } = useSession();
   const [description, setDescription] = useState("");
 
   // Use the useFetch hook to handle loading, data, and error states
@@ -18,28 +20,36 @@ export function AppointmentForm({ doctorId, slot, onBack, onComplete }) {
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Create form data
-    const formData = new FormData();
-    formData.append("doctorId", doctorId);
-    formData.append("startTime", slot.startTime);
-    formData.append("endTime", slot.endTime);
-    formData.append("description", description);
+  const formData = new FormData();
+  formData.append("doctorId", doctorId);
+  formData.append("startTime", slot.startTime);
+  formData.append("endTime", slot.endTime);
+  formData.append("description", description);
 
-    // Submit booking using the function from useFetch
-    await submitBooking(formData);
-  };
+   await submitBooking(formData);
+
+  if (res?.success) {
+    await update(); // Refresh session to show new credits
+    toast.success("Appointment booked success!");
+    onComplete();   // Do your parent callback
+  }
+};
+
 
   // Handle response after booking attempt
-  useEffect(() => {
-    if (data) {
-      if (data.success) {
-        toast.success("Appointment booked successfully!");
-        onComplete();
-      }
+ useEffect(() => {
+  const run = async () => {
+    if (data?.success) {
+      await update(); // 🔁 Refresh session credits
+      toast.success("Appointment booked successfully!");
+      onComplete();
     }
-  }, [data]);
+  };
+  run();
+}, [data]);
+
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
