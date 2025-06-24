@@ -113,3 +113,70 @@ export async function deductCreditsForAppointment(userId, doctorId) {
     return { success: false, error: error.message };
   }
 }
+
+export async function deductCreditsForAppointment(doctorId) {
+  const { authorized, session, dbUser } = await authGuard("PATIENT");
+  if (!authorized || !dbUser) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const doctor = await db.user.findUnique({
+      where: { id: doctorId },
+    });
+
+    if (!doctor || doctor.role !== "DOCTOR") {
+      return { success: false, error: "Invalid doctor" };
+    }
+
+    if (dbUser.credits < APPOINTMENT_CREDIT_COST) {
+      return { success: false, error: "Insufficient credits" };
+    }
+
+    const result = await db.$transaction(async (tx) => {
+      // Record deduction from patient
+      await tx.creditTransaction.create({
+        data: {
+          userId: dbUser.id,
+          amount: -APPOINTMENT_CREDIT_COST,
+          type: "APPOINTMENT_DEDUCTION",
+        },
+      });
+
+      // Record addition to doctor
+      await tx.creditTransaction.create({
+        data: {
+          userId: doctor.id,
+          amount: APPOINTMENT_CREDIT_COST,
+          type: "APPOINTMENT_DEDUCTION",
+        },
+      });
+
+      // Update both balances
+      const updatedPatient = await tx.user.update({
+        where: { id: dbUser.id },
+        data: {
+          credits: {
+            decrement: APPOINTMENT_CREDIT_COST,
+          },
+        },
+      });
+
+      await tx.user.update({
+        where: { id: doctor.id },
+        data: {
+          credits: {
+            increment: APPOINTMENT_CREDIT_COST,
+          },
+        },
+      });
+
+      return updatedPatient;
+    });
+
+    return { success: true, user: result };
+  } catch (error) {
+    console.error("Error in credit deduction:", error);
+    return { success: false, error: error.message };
+  }
+}
