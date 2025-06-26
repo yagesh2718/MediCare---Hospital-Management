@@ -4,9 +4,7 @@ import { prisma as db } from "@/lib/prisma";
 import { authGuard } from "@/lib/authGuard";
 import { revalidatePath } from "next/cache";
 
-/**
- * Set doctor's availability slots
- */
+
 export async function setAvailabilitySlots(formData) {
   const { authorized, dbUser } = await authGuard("DOCTOR");
   if (!authorized || !dbUser) {
@@ -45,7 +43,6 @@ export async function setAvailabilitySlots(formData) {
       });
     }
 
-    // Create new slot
     const newSlot = await db.availability.create({
       data: {
         doctorId: dbUser.id,
@@ -63,9 +60,7 @@ export async function setAvailabilitySlots(formData) {
   }
 }
 
-/**
- * Get doctor's availability
- */
+
 export async function getDoctorAvailability() {
   const { authorized, dbUser } = await authGuard("DOCTOR");
   if (!authorized || !dbUser) throw new Error("Unauthorized");
@@ -82,9 +77,7 @@ export async function getDoctorAvailability() {
   }
 }
 
-/**
- * Get doctor's upcoming appointments
- */
+
 export async function getDoctorAppointments() {
   const { authorized, dbUser } = await authGuard("DOCTOR");
   if (!authorized || !dbUser) throw new Error("Unauthorized");

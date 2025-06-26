@@ -20,7 +20,7 @@ export async function POST(req) {
     });
     return Response.json({ orderId: order.id, amount: order.amount });
   } catch (err) {
-    console.error("Create Order Error:", err); // ✅ log the issue
+    console.error("Create Order Error:", err); 
     return Response.json({ error: "Server error" }, { status: 500 });
   }
 }

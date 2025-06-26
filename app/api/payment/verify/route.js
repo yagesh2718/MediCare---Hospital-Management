@@ -12,7 +12,6 @@ export async function POST(req) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // ✅ Use action to allocate credits
     const updatedUser = await allocateCreditsAfterPurchase(packageId);
 
     if (!updatedUser) {

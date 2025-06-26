@@ -34,10 +34,8 @@ export default function OnboardingPage() {
   const [step, setStep] = useState("choose-role");
   const router = useRouter();
 
-  // Custom hook for user role server action
   const { loading, data, fn: submitUserRole } = useFetch(setUserRole);
 
-  // React Hook Form setup with Zod validation
   const {
     register,
     handleSubmit,
@@ -54,10 +52,8 @@ export default function OnboardingPage() {
     },
   });
 
-  // Watch specialty value for controlled select component
   const specialtyValue = watch("specialty");
 
-  // Handle patient role selection
   const handlePatientSelection = async () => {
     if (loading) return;
 
@@ -75,7 +71,6 @@ export default function OnboardingPage() {
     }
   }, [data]);
 
-  // Added missing onDoctorSubmit function
   const onDoctorSubmit = async (data) => {
     if (loading) return;
 
@@ -91,17 +86,16 @@ export default function OnboardingPage() {
     await update()
   };
 
-  // Role selection screen
   if (step === "choose-role") {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card
-          className="border-emerald-900/20 hover:border-emerald-700/40 cursor-pointer transition-all"
+          className="border-blue-900/20 hover:border-blue-700/40 cursor-pointer transition-all"
           onClick={() => !loading && handlePatientSelection()}
         >
           <CardContent className="pt-6 pb-6 flex flex-col items-center text-center">
-            <div className="p-4 bg-emerald-900/20 rounded-full mb-4">
-              <User className="h-8 w-8 text-emerald-400" />
+            <div className="p-4 bg-blue-900/20 rounded-full mb-4">
+              <User className="h-8 w-8 text-blue-400" />
             </div>
             <CardTitle className="text-xl font-semibold text-white mb-2">
               Join as a Patient
@@ -111,7 +105,7 @@ export default function OnboardingPage() {
               healthcare journey
             </CardDescription>
             <Button
-              className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700"
+              className="w-full mt-2 bg-blue-600 hover:bg-blue-700"
               disabled={loading}
             >
               {loading ? (
@@ -127,12 +121,12 @@ export default function OnboardingPage() {
         </Card>
 
         <Card
-          className="border-emerald-900/20 hover:border-emerald-700/40 cursor-pointer transition-all"
+          className="border-blue-900/20 hover:border-blue-700/40 cursor-pointer transition-all"
           onClick={() => !loading && setStep("doctor-form")}
         >
           <CardContent className="pt-6 pb-6 flex flex-col items-center text-center">
-            <div className="p-4 bg-emerald-900/20 rounded-full mb-4">
-              <Stethoscope className="h-8 w-8 text-emerald-400" />
+            <div className="p-4 bg-blue-900/20 rounded-full mb-4">
+              <Stethoscope className="h-8 w-8 text-blue-400" />
             </div>
             <CardTitle className="text-xl font-semibold text-white mb-2">
               Join as a Doctor
@@ -142,7 +136,7 @@ export default function OnboardingPage() {
               provide consultations
             </CardDescription>
             <Button
-              className="w-full mt-2 bg-emerald-600 hover:bg-emerald-700"
+              className="w-full mt-2 bg-blue-600 hover:bg-blue-700"
               disabled={loading}
             >
               Continue as Doctor
@@ -153,10 +147,9 @@ export default function OnboardingPage() {
     );
   }
 
-  // Doctor registration form
   if (step === "doctor-form") {
     return (
-      <Card className="border-emerald-900/20">
+      <Card className="border-blue-900/20">
         <CardContent className="pt-6">
           <div className="mb-6">
             <CardTitle className="text-2xl font-bold text-white mb-2">
@@ -184,7 +177,7 @@ export default function OnboardingPage() {
                       value={spec.name}
                       className="flex items-center gap-2"
                     >
-                      <span className="text-emerald-400">{spec.icon}</span>
+                      <span className="text-blue-400">{spec.icon}</span>
                       {spec.name}
                     </SelectItem>
                   ))}
@@ -250,14 +243,14 @@ export default function OnboardingPage() {
                 type="button"
                 variant="outline"
                 onClick={() => setStep("choose-role")}
-                className="border-emerald-900/30"
+                className="border-blue-900/30"
                 disabled={loading}
               >
                 Back
               </Button>
               <Button
                 type="submit"
-                className="bg-emerald-600 hover:bg-emerald-700"
+                className="bg-blue-600 hover:bg-blue-700"
                 disabled={loading}
               >
                 {loading ? (

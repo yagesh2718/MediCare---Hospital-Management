@@ -1,6 +1,6 @@
 import { getCurrentUser } from "@/actions/onboarding";
 import { redirect } from "next/navigation";
-import { authGuard } from "@/lib/authGuard";
+
 
 export const metadata = {
   title: "Onboarding - MediCare",
@@ -9,19 +9,14 @@ export const metadata = {
 
 export default async function OnboardingLayout({ children }) {
 
-  const { authorized } = await authGuard();
 
-  if (!authorized) redirect("/signup");
-
-  // Get complete user profile
   const user = await getCurrentUser();
 
-  // Redirect users who have already completed onboarding
+  if(!user)  return redirect("/login");
   if (user) {
     if (user.role === "PATIENT") {
       redirect("/doctors");
     } else if (user.role === "DOCTOR") {
-      // Check verification status for doctors
       if (user.verificationStatus === "VERIFIED") {
         redirect("/doctor");
       } else {

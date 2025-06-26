@@ -57,7 +57,6 @@ export async function bookAppointment(formData) {
   const { success, error } = await deductCreditsForAppointment(doctor.id);
   if (!success) throw new Error(error || "Credit deduction failed");
 
-  // Create appointment
   const appointment = await db.appointment.create({
     data: {
       patientId: patient.id,

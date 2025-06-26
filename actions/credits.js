@@ -16,9 +16,7 @@ const PLAN_CREDITS = {
 
 const APPOINTMENT_CREDIT_COST = 2;
 
-/**
- * Allocates credits based on current plan. Called after successful Razorpay payment.
- */
+
 export async function allocateCreditsAfterPurchase(packageId) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) return null;
@@ -33,7 +31,6 @@ export async function allocateCreditsAfterPurchase(packageId) {
   if (!creditsToAdd) return null;
 
   const result = await prisma.$transaction(async (tx) => {
-    // Create transaction
     await tx.creditTransaction.create({
       data: {
         userId: user.id,

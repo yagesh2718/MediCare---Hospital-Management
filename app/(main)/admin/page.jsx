@@ -7,9 +7,15 @@ import {
   getVerifiedDoctors,
   getPendingPayouts,
 } from "@/actions/admin";
+import { authGuard } from "@/lib/authGuard";
+import { redirect } from "next/navigation";
 
 export default async function AdminPage() {
-  // Fetch all data in parallel
+  const { authorized, dbUser } = await authGuard("ADMIN");
+  
+    if (!authorized) {
+      return redirect("/login");
+    }
   const [pendingDoctorsData, verifiedDoctorsData, pendingPayoutsData] =
     await Promise.all([
       getPendingDoctors(),

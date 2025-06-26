@@ -1,4 +1,3 @@
-// /app/doctors/[id]/_components/doctor-profile.jsx
 "use client";
 
 import { useState } from "react";
@@ -64,10 +63,10 @@ export function DoctorProfile({ doctor, availableDays }) {
       {/* Left column - Doctor Photo and Quick Info (fixed on scroll) */}
       <div className="md:col-span-1">
         <div className="md:sticky md:top-24">
-          <Card className="border-emerald-900/20">
+          <Card className="border-blue-900/20">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
-                <div className="relative w-32 h-32 rounded-full overflow-hidden mb-4 bg-emerald-900/20">
+                <div className="relative w-32 h-32 rounded-full overflow-hidden mb-4 bg-blue-900/20">
                   {doctor.imageUrl ? (
                     <Image
                       src={doctor.imageUrl}
@@ -77,7 +76,7 @@ export function DoctorProfile({ doctor, availableDays }) {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <User className="h-16 w-16 text-emerald-400" />
+                      <User className="h-16 w-16 text-blue-400" />
                     </div>
                   )}
                 </div>
@@ -88,13 +87,13 @@ export function DoctorProfile({ doctor, availableDays }) {
 
                 <Badge
                   variant="outline"
-                  className="bg-emerald-900/20 border-emerald-900/30 text-emerald-400 mb-4"
+                  className="bg-blue-900/20 border-blue-900/30 text-blue-400 mb-4"
                 >
                   {doctor.specialty}
                 </Badge>
 
                 <div className="flex items-center justify-center mb-2">
-                  <Medal className="h-4 w-4 text-emerald-400 mr-2" />
+                  <Medal className="h-4 w-4 text-blue-400 mr-2" />
                   <span className="text-muted-foreground">
                     {doctor.experience} years experience
                   </span>
@@ -102,7 +101,7 @@ export function DoctorProfile({ doctor, availableDays }) {
 
                 <Button
                   onClick={toggleBooking}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 mt-4"
+                  className="w-full bg-blue-600 hover:bg-blue-700 mt-4"
                 >
                   {showBooking ? (
                     <>
@@ -124,7 +123,7 @@ export function DoctorProfile({ doctor, availableDays }) {
 
       {/* Right column - Doctor Details and Booking Section */}
       <div className="md:col-span-2 space-y-6">
-        <Card className="border-emerald-900/20">
+        <Card className="border-blue-900/20">
           <CardHeader>
             <CardTitle className="text-xl font-bold text-white">
               About Dr. {doctor.name}
@@ -136,7 +135,7 @@ export function DoctorProfile({ doctor, availableDays }) {
           <CardContent className="space-y-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-emerald-400" />
+                <FileText className="h-5 w-5 text-blue-400" />
                 <h3 className="text-white font-medium">Description</h3>
               </div>
               <p className="text-muted-foreground whitespace-pre-line">
@@ -144,16 +143,16 @@ export function DoctorProfile({ doctor, availableDays }) {
               </p>
             </div>
 
-            <Separator className="bg-emerald-900/20" />
+            <Separator className="bg-blue-900/20" />
 
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-emerald-400" />
+                <Clock className="h-5 w-5 text-blue-400" />
                 <h3 className="text-white font-medium">Availability</h3>
               </div>
               {totalSlots > 0 ? (
                 <div className="flex items-center">
-                  <Calendar className="h-5 w-5 text-emerald-400 mr-2" />
+                  <Calendar className="h-5 w-5 text-blue-400 mr-2" />
                   <p className="text-muted-foreground">
                     {totalSlots} time slots available for booking over the next
                     4 days
@@ -175,7 +174,7 @@ export function DoctorProfile({ doctor, availableDays }) {
         {/* Booking Section - Conditionally rendered */}
         {showBooking && (
           <div id="booking-section">
-            <Card className="border-emerald-900/20">
+            <Card className="border-blue-900/20">
               <CardHeader>
                 <CardTitle className="text-xl font-bold text-white">
                   Book an Appointment

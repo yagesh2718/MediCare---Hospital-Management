@@ -1,6 +1,7 @@
 import { getDoctorById } from "@/actions/appointments";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/page-header";
+import { Stethoscope } from "lucide-react";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -21,7 +22,7 @@ export default async function DoctorProfileLayout({ children, params }) {
   return (
     <div className="container mx-auto">
       <PageHeader
-        // icon={<Stethoscope />}
+        icon={<Stethoscope />}
         title={"Dr. " + doctor.name}
         backLink={`/doctors/${doctor.specialty}`}
         backLabel={`Back to ${doctor.specialty}`}

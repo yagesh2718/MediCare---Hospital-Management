@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 
+
 const creditPlans = [
   {
     id: "standard",
@@ -20,7 +21,11 @@ const creditPlans = [
   },
 ];
 
-export default function Pricing() {
+export default async function Pricing() {
+
+  if (!authorized) {
+    return redirect("/login");
+  }
   const { update } = useSession();
   useEffect(() => {
     const script = document.createElement("script");
@@ -65,7 +70,7 @@ export default function Pricing() {
   };
 
   return (
-    <div className="h-100 text-white px-4 py-12">
+    <div className="h-100 text-white px-4 py-22">
       <h1 className="text-4xl font-bold text-center mb-10">Choose a Plan</h1>
       <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
         {creditPlans.map((plan) => (

@@ -1,9 +1,7 @@
 import { prisma as db } from "@/lib/prisma";
-import { authGuard } from "@/lib/authGuard"; // custom guard you've defined
+import { authGuard } from "@/lib/authGuard";
 
-/**
- * Get all appointments for the authenticated patient
- */
+
 export async function getPatientAppointments() {
   const { authorized, dbUser } = await authGuard("PATIENT");
 

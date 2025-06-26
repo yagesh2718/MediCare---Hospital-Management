@@ -31,7 +31,6 @@ export const authOptions = {
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user) {
-        // Fetch fresh user from DB to get full info (esp. credits)
         const dbUser = await prisma.user.findUnique({
           where: { email: user.email },
         });

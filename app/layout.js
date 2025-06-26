@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import { Providers } from "./Providers"; // ✅ import Providers
 import { Toaster } from "sonner";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +20,7 @@ export default function RootLayout({ children }) {
           <Header />
           <main className="min-h-screen">{children}</main>
           <Toaster richColors />
-          <footer>
-            <div>Made by Yagesh</div>
-          </footer>
+          <Footer/>
         </Providers>
       </body>
     </html>

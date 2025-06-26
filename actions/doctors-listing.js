@@ -2,9 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 
-/**
- * Get doctors by specialty
- */
+
 export async function getDoctorsBySpecialty(specialty) {
   try {
     const doctors = await prisma.user.findMany({

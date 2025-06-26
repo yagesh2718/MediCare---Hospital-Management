@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Signup() {
   const [form, setForm] = useState({
@@ -8,17 +10,26 @@ export default function Signup() {
     email: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
-    if (res.ok) router.push("/login");
-    else alert("Signup failed");
+    setLoading(false);
+
+    if (res.ok) {
+      toast.success("Account created successfully!");
+      router.push("/login");
+    } else {
+      toast.error("Signup failed. Please try again.");
+    }
   };
 
   return (
@@ -37,7 +48,7 @@ export default function Signup() {
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
-            className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="email"
@@ -45,7 +56,7 @@ export default function Signup() {
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
-            className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             type="password"
@@ -53,22 +64,22 @@ export default function Signup() {
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
-            className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {/* <select
-            value={form.role}
-            onChange={(e) => setForm({ ...form, role: e.target.value })}
-            className="w-full px-4 py-3 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            <option value="patient">Patient</option>
-            <option value="doctor">Doctor</option>
-          </select> */}
         </div>
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-lg transition duration-200"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition duration-200 disabled:opacity-50"
         >
-          Sign Up
+          {loading ? (
+            <>
+              <Loader2 className="h-5 w-5 animate-spin" />
+              Signing Up...
+            </>
+          ) : (
+            "Sign Up"
+          )}
         </button>
       </form>
     </div>

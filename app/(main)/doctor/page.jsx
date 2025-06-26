@@ -7,8 +7,16 @@
   import DoctorAppointmentsList from "./_components/appointments-list";
  import { getDoctorEarnings, getDoctorPayouts } from "@/actions/payout";
  import { DoctorEarnings } from "./_components/doctor-earnings";
+ import { authGuard } from "@/lib/authGuard";
 
 export default async function DoctorDashboardPage() {
+
+  const { authorized, dbUser } = await authGuard("DOCTOR");
+
+  if (!authorized) {
+    return redirect("/login");
+  }
+ 
    const user = await getCurrentUser();
 
   const [appointmentsData, availabilityData, earningsData, payoutsData] =
@@ -19,12 +27,10 @@ export default async function DoctorDashboardPage() {
         getDoctorPayouts(),
     ]);
 
-// Redirect if not a doctor
    if (user?.role !== "DOCTOR") {
      redirect("/onboarding");
   }
 
-  // If already verified, redirect to dashboard
   if (user?.verificationStatus !== "VERIFIED") {
     redirect("/doctor/verification");
   }

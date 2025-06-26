@@ -4,9 +4,9 @@ import { prisma as db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { authGuard } from "@/lib/authGuard";
 
-const CREDIT_VALUE = 10;
-const PLATFORM_FEE_PER_CREDIT = 2;
-const DOCTOR_EARNINGS_PER_CREDIT = 8;
+const CREDIT_VALUE = 100;
+const PLATFORM_FEE_PER_CREDIT = 10;
+const DOCTOR_EARNINGS_PER_CREDIT = 90;
 
 export async function requestPayout(formData) {
   const { authorized, dbUser: doctor } = await authGuard("DOCTOR");
@@ -104,8 +104,8 @@ export async function getDoctorEarnings() {
       thisMonthAppointments.length * 2 * DOCTOR_EARNINGS_PER_CREDIT;
     console.log("from payout earnings" ,totalEarnings)
     const averageEarningsPerMonth =
-      totalEarnings > 0
-        ? totalEarnings / Math.max(1, new Date().getMonth() + 1)
+      thisMonthEarnings > 0
+        ? thisMonthEarnings / Math.max(1, new Date().getMonth() + 1)
         : 0;
 
     const availableCredits = doctor.credits;

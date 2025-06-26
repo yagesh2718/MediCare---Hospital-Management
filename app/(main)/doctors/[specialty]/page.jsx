@@ -6,12 +6,10 @@ import { PageHeader } from "@/components/page-header";
 export default async function DoctorSpecialtyPage({ params }) {
   const { specialty } = await params;
 
-  // Redirect to main doctors page if no specialty is provided
   if (!specialty) {
     redirect("/doctors");
   }
 
-  // Fetch doctors by specialty
   const { doctors, error } = await getDoctorsBySpecialty(specialty);
 
   if (error) {
@@ -46,14 +44,3 @@ export default async function DoctorSpecialtyPage({ params }) {
     </div>
   );
 }
-// import React from 'react'
-
-// const page = () => {
-//   return (
-//     <div>
-//       speciality
-//     </div>
-//   )
-// }
-
-// export default page

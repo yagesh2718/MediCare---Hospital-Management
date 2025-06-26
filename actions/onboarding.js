@@ -4,11 +4,8 @@ import { prisma as db } from "@/lib/prisma";
 import { authGuard } from "@/lib/authGuard";
 import { revalidatePath } from "next/cache";
 
-/**
- * Sets the user's role and related information
- */
 export async function setUserRole(formData) {
-  const { authorized, dbUser } = await authGuard(); // ✅ Use NextAuth-based guard
+  const { authorized, dbUser } = await authGuard(); 
 
   if (!authorized || !dbUser) {
     throw new Error("Unauthorized");

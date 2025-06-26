@@ -4,17 +4,13 @@ import { prisma as db } from "@/lib/prisma";
 import { authGuard } from "@/lib/authGuard";
 import { revalidatePath } from "next/cache";
 
-/**
- * Verifies if current user is an ADMIN
- */
+
 export async function verifyAdmin() {
   const { authorized, dbUser } = await authGuard("ADMIN");
   return authorized && dbUser?.role === "ADMIN";
 }
 
-/**
- * Gets all doctors with pending verification
- */
+
 export async function getPendingDoctors() {
   const isAdmin = await verifyAdmin();
   if (!isAdmin) throw new Error("Unauthorized");
@@ -36,9 +32,7 @@ export async function getPendingDoctors() {
   }
 }
 
-/**
- * Gets all verified doctors
- */
+
 export async function getVerifiedDoctors() {
   const isAdmin = await verifyAdmin();
   if (!isAdmin) throw new Error("Unauthorized");
@@ -61,9 +55,6 @@ export async function getVerifiedDoctors() {
   }
 }
 
-/**
- * Updates a doctor's verification status
- */
 export async function updateDoctorStatus(formData) {
   const isAdmin = await verifyAdmin();
   if (!isAdmin) throw new Error("Unauthorized");
@@ -93,9 +84,7 @@ export async function updateDoctorStatus(formData) {
   }
 }
 
-/**
- * Suspends or reinstates a doctor
- */
+
 export async function updateDoctorActiveStatus(formData) {
   const isAdmin = await verifyAdmin();
   if (!isAdmin) throw new Error("Unauthorized");

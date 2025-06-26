@@ -29,24 +29,20 @@ import { BarLoader } from "react-spinners";
 export function PendingDoctors({ doctors }) {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
 
-  // Custom hook for approve/reject server action
   const {
     loading,
     data,
     fn: submitStatusUpdate,
   } = useFetch(updateDoctorStatus);
 
-  // Open doctor details dialog
   const handleViewDetails = (doctor) => {
     setSelectedDoctor(doctor);
   };
 
-  // Close doctor details dialog
   const handleCloseDialog = () => {
     setSelectedDoctor(null);
   };
 
-  // Handle approve or reject doctor
   const handleUpdateStatus = async (doctorId, status) => {
     if (loading) return;
 
@@ -65,7 +61,7 @@ export function PendingDoctors({ doctors }) {
 
   return (
     <div>
-      <Card className="bg-muted/20 border-emerald-900/20">
+      <Card className="bg-muted/20 border-blue-900/20">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-white">
             Pending Doctor Verifications
@@ -84,13 +80,13 @@ export function PendingDoctors({ doctors }) {
               {doctors.map((doctor) => (
                 <Card
                   key={doctor.id}
-                  className="bg-background border-emerald-900/20 hover:border-emerald-700/30 transition-all"
+                  className="bg-background border-blue-900/20 hover:border-blue-700/30 transition-all"
                 >
                   <CardContent className="p-4">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div className="bg-muted/20 rounded-full p-2">
-                          <User className="h-5 w-5 text-emerald-400" />
+                          <User className="h-5 w-5 text-blue-400" />
                         </div>
                         <div>
                           <h3 className="font-medium text-white">
@@ -113,7 +109,7 @@ export function PendingDoctors({ doctors }) {
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewDetails(doctor)}
-                          className="border-emerald-900/30 hover:bg-muted/80"
+                          className="border-blue-900/30 hover:bg-muted/80"
                         >
                           View Details
                         </Button>
@@ -170,12 +166,12 @@ export function PendingDoctors({ doctors }) {
                 </div>
               </div>
 
-              <Separator className="bg-emerald-900/20" />
+              <Separator className="bg-blue-900/20" />
 
               {/* Professional Details */}
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <Medal className="h-5 w-5 text-emerald-400" />
+                  <Medal className="h-5 w-5 text-blue-400" />
                   <h3 className="text-white font-medium">
                     Professional Information
                   </h3>
@@ -207,7 +203,7 @@ export function PendingDoctors({ doctors }) {
                         href={selectedDoctor.credentialUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-emerald-400 hover:text-emerald-300 flex items-center"
+                        className="text-blue-400 hover:text-blue-300 flex items-center"
                       >
                         View Credentials
                         <ExternalLink className="h-4 w-4 ml-1" />
@@ -217,12 +213,12 @@ export function PendingDoctors({ doctors }) {
                 </div>
               </div>
 
-              <Separator className="bg-emerald-900/20" />
+              <Separator className="bg-blue-900/20" />
 
               {/* Description */}
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-emerald-400" />
+                  <FileText className="h-5 w-5 text-blue-400" />
                   <h3 className="text-white font-medium">
                     Service Description
                   </h3>
@@ -252,7 +248,7 @@ export function PendingDoctors({ doctors }) {
                   handleUpdateStatus(selectedDoctor.id, "VERIFIED")
                 }
                 disabled={loading}
-                className="bg-emerald-600 hover:bg-emerald-700"
+                className="bg-blue-600 hover:bg-blue-700"
               >
                 <Check className="mr-2 h-4 w-4" />
                 Approve

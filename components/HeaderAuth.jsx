@@ -14,6 +14,8 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 export default function HeaderAuth() {
   const [open, setOpen] = useState(false);
@@ -22,11 +24,12 @@ export default function HeaderAuth() {
   const [image, setImage] = useState("");
   const dropdownRef = useRef();
   const [_, forceUpdate] = useState(false);
-  const { data: session, update } = useSession();
+  const { data: session, status, update } = useSession();
+const isLoading = status === "loading";
+
 
   const toggleDropdown = () => setOpen((prev) => !prev);
 
-  // Sync session name/image once it's available
   useEffect(() => {
     if (session?.user) {
       setName(session.user.name || "");
@@ -42,7 +45,7 @@ export default function HeaderAuth() {
     });
 
     if (res.ok) {
-      await update({ name, image }); // 👈 this refreshes session data
+      await update({ name, image }); 
       setEditingName(false);
       setOpen(false);
     } else {
@@ -50,7 +53,6 @@ export default function HeaderAuth() {
     }
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -67,27 +69,37 @@ export default function HeaderAuth() {
   }, [open]);
 
   if (!session?.user) {
-    return (
-      <div className="flex gap-4">
-        <Link href="/login">
-          <Button
-            className="cursor-pointer w-20 border-1 border-white hover:bg-black hover:border-gray-500"
-            variant="secondary"
-          >
-            Login
-          </Button>
-        </Link>
-        <Link href="/signup">
-          <Button
-            className="cursor-pointer w-20 border-1 border-white hover:bg-black hover:border-gray-500"
-            variant="secondary"
-          >
-            Signup
-          </Button>
-        </Link>
-      </div>
-    );
-  }
+  return (
+    <div className="flex gap-4">
+      {isLoading ? (
+        <>
+          <Skeleton className="h-10 w-20 rounded-md" />
+          <Skeleton className="h-10 w-20 rounded-md" />
+        </>
+      ) : (
+        <>
+          <Link href="/login">
+            <Button
+              className="cursor-pointer w-20 border-1 border-white hover:bg-black hover:border-gray-500"
+              variant="secondary"
+            >
+              Login
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button
+              className="cursor-pointer w-20 border-1 border-white hover:bg-black hover:border-gray-500"
+              variant="secondary"
+            >
+              Signup
+            </Button>
+          </Link>
+        </>
+      )}
+    </div>
+  );
+}
+
 
   return (
   
@@ -99,9 +111,9 @@ export default function HeaderAuth() {
           <Link href="/admin">
             <Button
               variant="outline"
-              className="hidden md:inline-flex items-center gap-2"
+              className="hidden md:inline-flex items-center gap-2 text-blue-400"
             >
-              <ShieldCheck className="h-4 w-4" />
+              <ShieldCheck className="h-4 w-4 text-blue-400" />
               Admin Dashboard
             </Button>
             <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
@@ -114,28 +126,30 @@ export default function HeaderAuth() {
           <Link href="/doctor">
             <Button
               variant="outline"
-              className="hidden md:inline-flex items-center gap-2"
+              className="hidden md:inline-flex items-center gap-2 text-blue-300 "
             >
-              <Stethoscope className="h-4 w-4" />
+              <Stethoscope className="h-4 w-4 text-blue-300 " />
               Doctor Dashboard
             </Button>
             <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
-              <Stethoscope className="h-4 w-4" />
+              <Stethoscope className="h-4 w-4 text-blue-400" />
             </Button>
           </Link>
         )}
 
         {session?.user?.role === "PATIENT" && (
           <>
+            <Link href="/pricing">
             <Badge
               variant="outline"
-              className="bg-emerald-900/30 border-emerald-700/30 h-8 px-4 py-1 text-emerald-400 text-sm font-medium md:inline-flex items-center gap-2"
+              className="bg-blue-900/30 border-blue-700/30 h-8 px-4 py-1 text-blue-400 text-sm font-medium md:inline-flex items-center gap-2"
             >
-               <Coins className="w-5 h-5 text-emerald-500" />
+               <Coins className="w-5 h-5 text-blue-500" />
               
                {console.log("credits" , session.user)}
               {session.user.credits} Credits
             </Badge>
+            </Link>
             <Link href="/appointments">
               <Button
                 variant="outline"
@@ -169,7 +183,7 @@ export default function HeaderAuth() {
         {/* Profile Image with Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <img
-            src={session.user.image || "/default-avatar.png"}
+            src={session.user.image || "/avatar.jpg"}
             alt="User"
             className="h-10 w-10 rounded-full cursor-pointer border border-blue-500"
             onClick={toggleDropdown}
@@ -180,7 +194,7 @@ export default function HeaderAuth() {
               {/* User Profile Row */}
               <div className="flex items-center gap-3">
                 <img
-                  src={image || "/default-avatar.png"}
+                 src="/avatar.jpg"
                   alt="Avatar"
                   className="h-12 w-12 rounded-full object-cover border border-zinc-700"
                 />
@@ -209,14 +223,14 @@ export default function HeaderAuth() {
                 </div>
               </div>
 
-              {/* Image URL Input */}
+              {/* Image URL Input
               <input
                 type="text"
                 placeholder="Profile photo URL"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
                 className="mt-3 bg-zinc-800 text-white border border-zinc-600 px-2 py-1 w-full rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
+              /> */}
 
               {/* Action Buttons */}
               <div className="flex justify-between mt-4">
@@ -227,7 +241,7 @@ export default function HeaderAuth() {
                   Save
                 </button>
                 <Button
-                  onClick={() => signOut()}
+                  onClick={() => signOut({ callbackUrl: "/" })}
                   className="text-sm bg-red-600 text-white "
                 >
                   Logout
